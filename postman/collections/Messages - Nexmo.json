@@ -1,0 +1,863 @@
+{
+	"info": {
+		"_postman_id": "be2ae4f3-7269-4418-9838-51cc0332f85f",
+		"name": "Messages - Nexmo",
+		"description": "Encapsulates multiple APIs to interact with our various channels such as WhatsApp Business, SMS, MMS, Viber, Facebook Messenger, etc. The API normalises information across all channels to abstracted to, from and content. This API is for outbound messages.\n\n---\n## [KPN Developer](https://developer.kpn.com/)<br/> [Getting Started](https://developer.kpn.com/getting-started)\n---\n\nContact Support:\n Name: API Support\n Email: api_developer@kpn.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "4406147-be2ae4f3-7269-4418-9838-51cc0332f85f"
+	},
+	"item": [
+		{
+			"name": "messages",
+			"item": [
+				{
+					"name": "Sends a message.",
+					"id": "fb861f9b-70fc-4829-b389-ed66f5c71ea9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "API-version to use. Not provided uses latest",
+								"key": "api-version",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"description": "(Required) UUID of the application",
+								"key": "ApplicationId",
+								"value": "{{ApplicationId}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"to\": {\n    \"type\": \"messenger\",\n    \"id\": \"<string>\",\n    \"number\": \"<string>\"\n  },\n  \"from\": {\n    \"type\": \"messenger\",\n    \"id\": \"<string>\",\n    \"number\": \"<string>\"\n  },\n  \"message\": {\n    \"content\": {\n      \"type\": \"custom\",\n      \"text\": \"<string>\",\n      \"image\": {\n        \"url\": \"<string>\"\n      },\n      \"audio\": {\n        \"url\": \"<string>\"\n      },\n      \"video\": {\n        \"url\": \"<string>\"\n      },\n      \"file\": {\n        \"url\": \"<string>\"\n      },\n      \"template\": {\n        \"name\": \"<string>\",\n        \"parameters\": [\n          {\n            \"default\": \"<string>\"\n          },\n          {\n            \"default\": \"<string>\"\n          }\n        ],\n        \"fallback_locale\": \"en\"\n      }\n    },\n    \"viber_service_msg\": {\n      \"category\": \"promotion\",\n      \"ttl\": \"<integer>\"\n    },\n    \"messenger\": {\n      \"category\": \"message_tag\",\n      \"tag\": \"<string>\"\n    }\n  },\n  \"client_ref\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"messages"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "f3cf1d16-a77a-483d-9824-0a2e5ef3b291",
+							"name": "Accepted.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": "",
+										"disabled": true
+									},
+									{
+										"description": "(Required) UUID of the application",
+										"key": "ApplicationId",
+										"value": "{{ApplicationId}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"to\": {\n    \"type\": \"messenger\",\n    \"id\": \"<string>\",\n    \"number\": \"<string>\"\n  },\n  \"from\": {\n    \"type\": \"messenger\",\n    \"id\": \"<string>\",\n    \"number\": \"<string>\"\n  },\n  \"message\": {\n    \"content\": {\n      \"type\": \"custom\",\n      \"text\": \"<string>\",\n      \"image\": {\n        \"url\": \"<string>\"\n      },\n      \"audio\": {\n        \"url\": \"<string>\"\n      },\n      \"video\": {\n        \"url\": \"<string>\"\n      },\n      \"file\": {\n        \"url\": \"<string>\"\n      },\n      \"template\": {\n        \"name\": \"<string>\",\n        \"parameters\": [\n          {\n            \"default\": \"<string>\"\n          },\n          {\n            \"default\": \"<string>\"\n          }\n        ],\n        \"fallback_locale\": \"en\"\n      }\n    },\n    \"viber_service_msg\": {\n      \"category\": \"promotion\",\n      \"ttl\": \"<integer>\"\n    },\n    \"messenger\": {\n      \"category\": \"message_tag\",\n      \"tag\": \"<string>\"\n    }\n  },\n  \"client_ref\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message_uuid\": \"<string>\"\n}"
+						},
+						{
+							"id": "4bbeee71-db71-45bb-93d4-3bdb243596a6",
+							"name": "Bad Request.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": "",
+										"disabled": true
+									},
+									{
+										"description": "(Required) UUID of the application",
+										"key": "ApplicationId",
+										"value": "{{ApplicationId}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"to\": {\n    \"type\": \"messenger\",\n    \"id\": \"<string>\",\n    \"number\": \"<string>\"\n  },\n  \"from\": {\n    \"type\": \"messenger\",\n    \"id\": \"<string>\",\n    \"number\": \"<string>\"\n  },\n  \"message\": {\n    \"content\": {\n      \"type\": \"custom\",\n      \"text\": \"<string>\",\n      \"image\": {\n        \"url\": \"<string>\"\n      },\n      \"audio\": {\n        \"url\": \"<string>\"\n      },\n      \"video\": {\n        \"url\": \"<string>\"\n      },\n      \"file\": {\n        \"url\": \"<string>\"\n      },\n      \"template\": {\n        \"name\": \"<string>\",\n        \"parameters\": [\n          {\n            \"default\": \"<string>\"\n          },\n          {\n            \"default\": \"<string>\"\n          }\n        ],\n        \"fallback_locale\": \"en\"\n      }\n    },\n    \"viber_service_msg\": {\n      \"category\": \"promotion\",\n      \"ttl\": \"<integer>\"\n    },\n    \"messenger\": {\n      \"category\": \"message_tag\",\n      \"tag\": \"<string>\"\n    }\n  },\n  \"client_ref\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"<string>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+						}
+					]
+				}
+			],
+			"id": "7ee752e1-21df-4ed4-a89b-751b751df04d"
+		},
+		{
+			"name": "applications",
+			"item": [
+				{
+					"name": "{uuid}",
+					"item": [
+						{
+							"name": "Retrieves details of a specific application.",
+							"id": "b9c05a7c-22d0-46db-b9cb-e89a806a2e01",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": ""
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/applications/:uuid",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"applications",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{uuid}}"
+										}
+									]
+								},
+								"description": "Retrieves detailed information of a specific application."
+							},
+							"response": [
+								{
+									"id": "57486d93-6a39-4d94-ba43-9f439fc52992",
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "API-version to use. Not provided uses latest",
+												"key": "api-version",
+												"value": ""
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/applications/:uuid",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"applications",
+												":uuid"
+											],
+											"variable": [
+												{
+													"key": "uuid",
+													"value": "{{uuid}}"
+												}
+											]
+										},
+										"description": "Retrieves detailed information of a specific application."
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"voice\": {\n    \"webhooks\": [\n      {\n        \"enpoint_type\": \"answer_url\",\n        \"endpoint\": \"<string>\",\n        \"http_method\": \"GET\"\n      },\n      {\n        \"enpoint_type\": \"answer_url\",\n        \"endpoint\": \"<string>\",\n        \"http_method\": \"GET\"\n      }\n    ]\n  }\n}"
+								},
+								{
+									"id": "4dcd324a-92b5-43e6-96ea-a2283a112ea1",
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "API-version to use. Not provided uses latest",
+												"key": "api-version",
+												"value": ""
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/applications/:uuid",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"applications",
+												":uuid"
+											],
+											"variable": [
+												{
+													"key": "uuid",
+													"value": "{{uuid}}"
+												}
+											]
+										},
+										"description": "Retrieves detailed information of a specific application."
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"type\": \"<string>\",\n  \"error_title\": \"<string>\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Deletes application.",
+							"id": "5806dbe0-c07a-4731-ab03-31230d11dfa9",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": ""
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/applications/:uuid",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"applications",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{uuid}}"
+										}
+									]
+								},
+								"description": "Deletes the existing application."
+							},
+							"response": [
+								{
+									"id": "16002f32-9b50-4d3e-94ca-e4af253fd163",
+									"name": "No Content",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "API-version to use. Not provided uses latest",
+												"key": "api-version",
+												"value": ""
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/applications/:uuid",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"applications",
+												":uuid"
+											],
+											"variable": [
+												{
+													"key": "uuid",
+													"value": "{{uuid}}"
+												}
+											]
+										},
+										"description": "Deletes the existing application."
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "543e00fb-d22f-4190-9e36-9131a7cf5de8"
+				},
+				{
+					"name": "Creates new application",
+					"id": "69e970ef-38da-4c8c-8a5b-62f6ac46863e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "API-version to use. Not provided uses latest",
+								"key": "api-version",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"description": "(Required) ",
+									"key": "name",
+									"value": "{{application.name}}"
+								},
+								{
+									"description": "(Required) ",
+									"key": "type",
+									"value": "messages"
+								},
+								{
+									"description": "(Required) Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.",
+									"key": "status_url",
+									"value": "{{application.status_url}}"
+								},
+								{
+									"description": "(Required) Nexmo sends Inbound Messages to this URL.",
+									"key": "inbound_url",
+									"value": "{{application.inbound_url}}"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							]
+						},
+						"description": "Creates a new application.\nThe basic body needs to include:\n - `name` with the name of the application.\n - `type` should be `messages`.\n - `status_url` Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.\n - `inbound_url`to receive Inbound Messages.\n \nCreates a call and returns a JSON object with the call identifier (uuid), status of the call, conversation_uuid the call is attached to and the direction of the call.\n"
+					},
+					"response": [
+						{
+							"id": "32841a97-1c0b-4f0a-a2e6-ea92c4d2b420",
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": ""
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"description": "(Required) ",
+											"key": "name",
+											"value": "{{application.name}}"
+										},
+										{
+											"description": "(Required) ",
+											"key": "type",
+											"value": "messages"
+										},
+										{
+											"description": "(Required) Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.",
+											"key": "status_url",
+											"value": "{{application.status_url}}"
+										},
+										{
+											"description": "(Required) Nexmo sends Inbound Messages to this URL.",
+											"key": "inbound_url",
+											"value": "{{application.inbound_url}}"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/applications",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"applications"
+									]
+								},
+								"description": "Creates a new application.\nThe basic body needs to include:\n - `name` with the name of the application.\n - `type` should be `messages`.\n - `status_url` Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.\n - `inbound_url`to receive Inbound Messages.\n \nCreates a call and returns a JSON object with the call identifier (uuid), status of the call, conversation_uuid the call is attached to and the direction of the call.\n"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"voice\": {\n    \"webhooks\": [\n      {\n        \"enpoint_type\": \"answer_url\",\n        \"endpoint\": \"<string>\",\n        \"http_method\": \"GET\"\n      },\n      {\n        \"enpoint_type\": \"answer_url\",\n        \"endpoint\": \"<string>\",\n        \"http_method\": \"GET\"\n      }\n    ]\n  }\n}"
+						},
+						{
+							"id": "a9f1712d-dc41-4afd-a47c-d30eab31485d",
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": ""
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"description": "(Required) ",
+											"key": "name",
+											"value": "{{application.name}}"
+										},
+										{
+											"description": "(Required) ",
+											"key": "type",
+											"value": "messages"
+										},
+										{
+											"description": "(Required) Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.",
+											"key": "status_url",
+											"value": "{{application.status_url}}"
+										},
+										{
+											"description": "(Required) Nexmo sends Inbound Messages to this URL.",
+											"key": "inbound_url",
+											"value": "{{application.inbound_url}}"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/applications",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"applications"
+									]
+								},
+								"description": "Creates a new application.\nThe basic body needs to include:\n - `name` with the name of the application.\n - `type` should be `messages`.\n - `status_url` Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.\n - `inbound_url`to receive Inbound Messages.\n \nCreates a call and returns a JSON object with the call identifier (uuid), status of the call, conversation_uuid the call is attached to and the direction of the call.\n"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"<string>\",\n  \"error_title\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Retrieves details of your applications.",
+					"id": "dbf95c05-33c7-45d3-af13-d93fa6f66ae6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "API-version to use. Not provided uses latest",
+								"key": "api-version",
+								"value": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/applications?page_size=10&page_index=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							],
+							"query": [
+								{
+									"key": "page_size",
+									"value": "10",
+									"description": "Set the number of items returned on each call to this endpoint"
+								},
+								{
+									"key": "page_index",
+									"value": "0",
+									"description": "Set the offset from the first page"
+								}
+							]
+						},
+						"description": "Retrieves details of your applications.\n\n > **Note:** This endpoint is not available for sandbox environments. To use it please apply for production."
+					},
+					"response": [
+						{
+							"id": "3e8f8ca0-5c26-4423-b318-c2034629c7aa",
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": ""
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/applications?page_size=10&page_index=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"applications"
+									],
+									"query": [
+										{
+											"key": "page_size",
+											"value": "10",
+											"description": "Set the number of items returned on each call to this endpoint"
+										},
+										{
+											"key": "page_index",
+											"value": "0",
+											"description": "Set the offset from the first page"
+										}
+									]
+								},
+								"description": "Retrieves details of your applications.\n\n > **Note:** This endpoint is not available for sandbox environments. To use it please apply for production."
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"count\": \"<integer>\",\n  \"page_size\": \"<integer>\",\n  \"record_index\": \"<integer>\",\n  \"_links\": {\n    \"self\": {\n      \"href\": \"<string>\"\n    }\n  },\n  \"_embedded\": {\n    \"applications\": [\n      {\n        \"id\": \"<uuid>\",\n        \"name\": \"<string>\",\n        \"voice\": {\n          \"webhooks\": [\n            {\n              \"enpoint_type\": \"answer_url\",\n              \"endpoint\": \"<string>\",\n              \"http_method\": \"GET\"\n            },\n            {\n              \"enpoint_type\": \"answer_url\",\n              \"endpoint\": \"<string>\",\n              \"http_method\": \"GET\"\n            }\n          ]\n        }\n      },\n      {\n        \"id\": \"<uuid>\",\n        \"name\": \"<string>\",\n        \"voice\": {\n          \"webhooks\": [\n            {\n              \"enpoint_type\": \"answer_url\",\n              \"endpoint\": \"<string>\",\n              \"http_method\": \"GET\"\n            },\n            {\n              \"enpoint_type\": \"answer_url\",\n              \"endpoint\": \"<string>\",\n              \"http_method\": \"GET\"\n            }\n          ]\n        }\n      }\n    ]\n  }\n}"
+						},
+						{
+							"id": "bfed8583-26f0-4fe6-a649-82a1c80ac4d0",
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "API-version to use. Not provided uses latest",
+										"key": "api-version",
+										"value": ""
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/applications?page_size=10&page_index=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"applications"
+									],
+									"query": [
+										{
+											"key": "page_size",
+											"value": "10",
+											"description": "Set the number of items returned on each call to this endpoint"
+										},
+										{
+											"key": "page_index",
+											"value": "0",
+											"description": "Set the offset from the first page"
+										}
+									]
+								},
+								"description": "Retrieves details of your applications.\n\n > **Note:** This endpoint is not available for sandbox environments. To use it please apply for production."
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"<string>\",\n  \"error_title\": \"<string>\"\n}"
+						}
+					]
+				}
+			],
+			"id": "8d800da4-4bfd-4147-a4f9-524ad09f1de6"
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{client_secret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{client_id}}",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://api-prd.kpn.com/oauth/client_credential/accesstoken?grant_type=client_credentials",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "access_token",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "client_credentials",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d2d6e9a6-a41e-449b-84f8-bcfdb0f82c0e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2223e98e-517d-4907-9e38-5f54b11be31c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "87268bee-15f9-4d0f-81a8-11c8dc00dbce",
+			"key": "baseUrl",
+			"value": "https://api-prd.kpn.com/communication/nexmo"
+		},
+		{
+			"id": "d8bbb388-9930-4252-9093-4f17abdbb074",
+			"key": "client_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "dd471d18-dff4-4251-9b4b-bad359b9fdca",
+			"key": "client_secret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "7e8143e9-22bd-4eb4-9691-b62b1818bd6c",
+			"key": "uuid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "d3334cbf-e01f-4ae9-88ed-062d704f7e61",
+			"key": "application.name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "fba4bbed-f1ca-42ee-8fb5-3f9d1aadf414",
+			"key": "application.status_url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "7198cd43-8aae-4cc9-bea2-202e3ed2d42e",
+			"key": "application.inbound_url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "25cea5cb-2e3a-449a-b308-cdf5aa39fc02",
+			"key": "ApplicationId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

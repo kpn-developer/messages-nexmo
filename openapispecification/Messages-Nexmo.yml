@@ -1,0 +1,800 @@
+openapi: "3.0.0"
+info:
+  version: "v1.1.1"
+  title: Messages - Nexmo
+  description: >-
+    Encapsulates multiple APIs to interact with our various channels such as WhatsApp Business, SMS, MMS, Viber, Facebook Messenger, etc. The API normalises information across all channels to abstracted to, from and content.
+    This API is for outbound messages.
+    
+    
+    ---
+    
+    ## [KPN Developer](https://developer.kpn.com/)<br/>
+    [Getting Started](https://developer.kpn.com/getting-started)
+    
+    ---
+    
+  contact:
+    name: API Support
+    email: api_developer@kpn.com
+    url: 'https://developer.kpn.com/support'
+  termsOfService: 'https://developer.kpn.com/legal'
+servers:
+  - 
+    url: 'https://api-prd.kpn.com/communication/nexmo'
+    description: API Store Application
+externalDocs:
+  description: HTTP response headers
+  url: https://developer.kpn.com/documentation-response-headers
+tags:
+  - 
+    name: applications
+    description: Application related resource management
+  - 
+    name: messages
+    description: Message related resource management
+paths:
+  "/applications":
+    parameters:
+      - $ref: '#/components/parameters/api_version_header'
+
+    post:  
+      security:
+        - oauth2: []
+      summary: Creates new application
+      description: >
+        Creates a new application.
+
+        The basic body needs to include:
+         - `name` with the name of the application.
+         - `type` should be `messages`.
+         - `status_url` Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.
+         - `inbound_url`to receive Inbound Messages.
+         
+        Creates a call and returns a JSON object with the call identifier (uuid), status of the call, conversation_uuid the call is attached to and the direction of the call.
+      tags:
+        - applications
+      operationId: createApplication
+      requestBody:
+        description: Application Details
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: "{{application.name}}"
+                type:
+                  type: string
+                  enum:
+                    - voice
+                    - messages
+                  default: messages
+                status_url:
+                  description: Nexmo sends Submitted, Delivered, Read and Rejected statuses for every message to this URL.
+                  type: string
+                  default: "{{applictaion.status_url}}"
+                  x-nexmo-developer-collection-description-shown: true
+                  example: "https://example.com/status"
+                inbound_url:
+                  description: Nexmo sends Inbound Messages to this URL.
+                  type: string
+                  default: "{{application.inbound_url}}"
+                  example: "https://example.com/inbound"
+                  items:
+                    type: string
+                    format: uri
+                    
+              required:
+                [name, type, status_url, inbound_url]
+      responses:
+        '201':
+          $ref: '#/components/responses/app_created'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+    get:  
+      security:
+        - oauth2: []
+      summary: Retrieves details of your applications.
+      description: >-
+        Retrieves details of your applications.
+        
+         > **Note:** This endpoint is not available for sandbox environments. To use it please apply for production.
+      tags:
+        - applications
+      operationId: getApplications
+      parameters:
+        - name: page_size
+          in: query
+          description: Set the number of items returned on each call to this endpoint
+          schema:
+            type: integer
+            default: 10
+          required: false
+        - name: page_index
+          in: query
+          description: Set the offset from the first page
+          schema:
+            type: integer
+            default: 0
+          required: false
+      responses:
+        '200':
+          $ref: '#/components/responses/app_list'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+  "/applications/{uuid}":
+    parameters:
+      - $ref: '#/components/parameters/api_version_header'
+      - $ref: '#/components/parameters/application_uuid'
+    get:
+      security:
+        - oauth2: []
+      summary: Retrieves details of a specific application.
+      description: >-
+        Retrieves detailed information of a specific application.
+      tags:
+        - applications
+      operationId: getApplication
+      responses:
+        '200':
+          $ref: '#/components/responses/app_detail_ok'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+    delete:
+      security:
+        - oauth2: []
+      summary: Deletes application.
+      description: >-
+        Deletes the existing application.
+      tags:
+        - applications
+      operationId: deleteApplication
+      responses:
+        '204':
+          description: No Content
+  /messages:
+    parameters:
+      - $ref: '#/components/parameters/api_version_header'
+      - $ref: '#/components/parameters/message_application_id_header'
+    post:
+      security:
+        - oauth2: []
+      summary: Sends a message.
+      operationId: NewMessage
+      tags: [messages]
+      requestBody:
+        description: Send a Message.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMessage'
+      responses:
+        '202':
+          description: Accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      callbacks:
+        message-status:
+          '{$request.body#/callback}':
+            post:
+              summary: Message Status
+              operationId: message-status
+              x-example-path: '/webhooks/message-status'
+              description: 'Webhooks to inform about events happening to the message at communication level (has it been delivered, rejected by the provider...).'
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/MessageStatus'
+              responses:
+                  '200':
+                    description: Your server returns this code if it accepts the callback.
+        inbound-message:
+          '{$request.body#/callback}':
+            post:
+              summary: Inbound Message
+              operationId: inbound-message
+              x-example-path: '/webhooks/inbound-message'
+              description: An inbound message from a customer to you.
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/InboundMessage'
+              responses:
+                  '200':
+                    description: Your server returns this code if it accepts the callback.
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api-prd.kpn.com/oauth/client_credential/accesstoken?grant_type=client_credentials
+          scopes: {}
+  schemas:
+    fields_uuid:
+      type: string
+      format: uuid
+      title: The UUID of the call leg that the event relates to
+      example: 63f61863-4a51-4f6b-86e1-46edebcf9356
+      description: >-
+          The unique identifier for this call leg. The UUID is created when
+          your call request is accepted by Nexmo. You use the UUID in all
+          requests for individual live calls
+    application:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name: 
+          type: string
+        voice:
+          type: object
+          properties:
+            webhooks:
+              type: array
+              items:
+                type: object
+                properties:
+                  enpoint_type:
+                    type: string
+                    default: answer_url
+                    # example: answer_url
+                  endpoint:
+                    type: string
+                    format: url
+                    # example: https://example.com/answer
+                  http_method:
+                    type: string
+                    default: GET
+              example:
+                -
+                  endpoint_type: answer_url
+                  endpoint: https://example.com/answer
+                  http_method: GET
+                - 
+                  endpoint_type: event_url
+                  endpoint: https://example.com/event
+                  http_method: POST
+    error401:
+      type: object
+      properties:
+        type: 
+          type: string
+          title: the unauthorized response
+          example: "UNAUTHORIZED"
+          description: Unauthorized type description
+        error_title: 
+          type: string
+          title: the title of an unauthorized response
+          example: Unauthorized
+          description: Unauthorized title description
+      required:
+        - type
+        - error_title
+    NewMessage:
+      required:
+        - to
+        - from
+        - message
+      properties:
+        to:
+          $ref: '#/components/schemas/ToProperty'
+        from:
+          $ref: '#/components/schemas/FromProperty'
+        message:
+          $ref: '#/components/schemas/MessageProperty'
+        client_ref:
+          type: string
+          description: Client reference of up to 40 characters. The reference will be present in every message status.
+          example: 'my-personal-reference'
+    Response:
+      required:
+        - message_uuid
+      properties:
+        message_uuid:
+          type: string
+          description: The UUID of the message.
+          example: 'aaaaaaaa-bbbb-cccc-dddd-0123456789ab'
+    Error:
+      description: 'The error format is standardized to the 4xx/5xx range with a code and a human readable explanation.'
+      required:
+        - type
+        - detail
+        - instance
+      properties:
+        type:
+          type: string
+          example: 'https://www.nexmo.com/messages/Errors#InvalidParams'
+        detail:
+          type: string
+          example: 'Your request parameters did not validate.'
+        instance:
+          type: string
+          example:
+    MessageStatus:
+      type: object
+      required:
+        - message_uuid
+        - to
+        - from
+        - timestamp
+        - status
+      properties:
+        message_uuid:
+          type: string
+          description: The UUID of the message.
+          example: 'aaaaaaaa-bbbb-cccc-dddd-0123456789ab'
+        to:
+          $ref: '#/components/schemas/ToProperty'
+        from:
+          $ref: '#/components/schemas/FromProperty'
+        timestamp:
+          $ref: '#/components/schemas/TimestampProperty'
+        status:
+          type: string
+          example: delivered
+          description: The status of the message. The `read` message status is only available for `viber_service_msg` and `messenger`.
+          enum:
+            - submitted
+            - delivered
+            - read
+            - rejected
+            - undeliverable
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 1300
+              description: The error code. See [Errors](#errors) for a table of descriptions.
+            reason:
+              type: string
+              example: 'Not part of the provider network'
+              description: Text describing the error. See [Errors](#errors) for a more details.
+        usage:
+          type: object
+          properties:
+            currency:
+              type: string
+              example: EUR
+              description: The charge currency in ISO 4217 format.
+              enum:
+                - EUR
+            price:
+              type: string
+              example: '0.0333'
+              description: The charge amount as a stringified number.
+        client_ref:
+          type: string
+          description: The client's reference.
+          example: 'my-personal-reference'
+    InboundMessage:
+      type: object
+      required:
+        - message_uuid
+        - to
+        - from
+        - timestamp
+      properties:
+        message_uuid:
+          type: string
+          example: 'aaaaaaaa-bbbb-cccc-dddd-0123456789ab'
+          description: The UUID of the message.
+        to:
+          type: object
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              description: The type of message being received.
+              example: messenger
+              enum:
+                - messenger
+                - whatsapp
+            id:
+              type: string
+              description: The ID of the recipient.
+              example: '0123456678901234'
+        from:
+          type: object
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              description: The type of message being sent.
+              example: messenger
+              enum:
+                - messenger
+                - whatsapp
+            id:
+              type: string
+              description: The ID of the sender.
+              example: '0123456789012345'
+        timestamp:
+          type: string
+          format: ISO 8601
+          description: The datetime of when the event occurred.
+          example: '2020-01-01T14:00:00.000Z'
+        message:
+          type: object
+          properties:
+            content:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: The type of message being received.
+                  example: 'text'
+                  enum:
+                    - text
+                    - image
+                    - audio
+                    - video
+                    - file
+                    - location
+                text:
+                  type: string
+                  description: The body of the message.
+                  example: 'Hello World!'
+                image:
+                  $ref: '#/components/schemas/ImageProperty'
+                audio:
+                  $ref: '#/components/schemas/AudioProperty'
+                video:
+                  $ref: '#/components/schemas/VideoProperty'
+                file:
+                  $ref: '#/components/schemas/FileProperty'
+                location:
+                  $ref: '#/components/schemas/LocationProperty'
+    ToProperty:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: The type of message that you want to send.
+          example: 'sms'
+          enum:
+            - sms
+            - viber_service_msg
+            - messenger
+            - whatsapp
+        id:
+          description: |
+            The ID of the message recipient.
+
+            **Messenger**: This value should be the `from.id` value you received in the inbound messenger event.
+
+            **SMS**: or **Viber**: or **WhatsApp** This value is not required.
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: '0123456789012345'
+        number:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: '447700900000'
+          description: |
+            **SMS**: or **Viber**: or **WhatsApp** The phone number of the message recipient in the [E.164](https://en.wikipedia.org/wiki/E.164) format. Don't use a leading + or 00 when entering a phone number, start with the country code, for example, 447700900000.
+
+            **Messenger**: This value is not required.
+    FromProperty:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: The type of message that you want to send.
+          example: sms
+          enum:
+            - sms
+            - viber_service_msg
+            - messenger
+            - whatsapp
+        id:
+          description: |
+            Your ID for the platform that you are sending from.
+
+            **Messenger**: This value should be the `to.id` value you received in the inbound messenger event.
+
+            **Viber**: This is your Service Message ID given to you by Nexmo Account Manager. To find out more please visit [nexmo.com/products/messages](https://www.nexmo.com/products/messages).
+
+            **SMS**:  or **WhatsApp** This value is not required.
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: '0123456789012345'
+        number:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: '447700900000'
+          description: |
+            **SMS**: The phone number of the message recipient in the [E.164](https://en.wikipedia.org/wiki/E.164) format. Don't use a leading + or 00 when entering a phone number, start with the country code, for example, 447700900000.
+
+            **WhatsApp**: This is your WhatsApp Business Number  given to you by Nexmo Account Manager. To find out more please visit [nexmo.com/products/messages](https://www.nexmo.com/products/messages).
+
+            **Messenger**: or **Viber**: This value is not required.
+    MessageProperty:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: object
+          properties:
+            type:
+              description: |
+                The type of message that you are sending.
+
+                **Messenger**: supports all types.
+
+                **Viber Service Messages**: supports `image` and `text`.
+
+                **WhatsApp**: supports `template` and `text`.
+
+                **SMS**: supports `text`.
+              type: string
+              enum:
+                - text
+                - image
+                - audio
+                - video
+                - file
+                - template
+                - custom
+              example: 'text'
+            text:
+              description: |
+                The text of the message.
+
+                **Messenger**: Is limited to 640 characters
+
+                **SMS** or **Viber**: Is 1000 characters
+
+                **WhatsApp**: is 4096 characters
+              type: string
+              minLength: 1
+              maxLength: 4096
+              example: 'Nexmo Verification code: 64873. Valid for 10 minutes.'
+            image:
+              $ref: '#/components/schemas/ImageProperty'
+            audio:
+              $ref: '#/components/schemas/AudioProperty'
+            video:
+              $ref: '#/components/schemas/VideoProperty'
+            file:
+              $ref: '#/components/schemas/FileProperty'
+            template:
+              $ref: '#/components/schemas/TemplateProperty'
+            # @TODO: Clarify requirements
+            # custom:
+            #   type: object
+            #   description: This is a highly experimental feature. To enable the user to send any type of Messenger message we have included a custom object. To use this feature include the original Messenger API payload from the message object onwards.
+            #   properties:
+            #     custom:
+            #       type: object
+        viber_service_msg:
+          type: object
+          properties:
+            category:
+              description: 'The use of different category tags enables the business to send messages for different use cases. For Viber Service Messages the first message sent from a business to a user must be personal, informative & a targeted message - not promotional. By default Nexmo sends the `transaction` category to Viber Service Messages.'
+              type: string
+              example: 'transaction'
+              enum:
+                - transaction
+                - promotion
+            ttl:
+              description: 'Only valid for Viber Service Messages. Set the time-to-live of message to be delivered in seconds. i.e. if the message is not delivered in 600 seconds then delete the message.'
+              type: integer
+              example: 600
+              minimum: 30
+              maximum: 86400
+        messenger:
+          type: object
+          properties:
+            category:
+              description: 'The use of different category tags enables the business to send messages for different use cases. For Facebook Messenger they need to comply with their [Messaging Types policy]( https://developers.facebook.com/docs/messenger-platform/send-messages#messaging_types). Nexmo maps our `category` to their `messaging_type`. If `message_tag` is used, then an additional `tag` for that type is mandatory. By default Nexmo sends the `response` category to Facebook Messenger.'
+              type: string
+              example: 'message_tag'
+              enum:
+                - response
+                - update
+                - message_tag
+            tag:
+              description: ‘A full list of the possible tags is available on [developers.facebook.com](https://developers.facebook.com/docs/messenger-platform/send-messages/message-tags)'
+              type: string
+              example: 'ticket_update'
+    TimestampProperty:
+      type: string
+      format: ISO 8601
+      description: The datetime of when the event occurred.
+      example: '2020-01-01T14:00:00.000Z'
+    ImageProperty:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 'The URL of the image attachment. `messenger` supports .jpg, .png and .gif. `viber_service_msg` supports .jpg and .png.'
+          minLength: 1
+          maxLength: 2000
+          example: 'https://example.com/image.jpg'
+    AudioProperty:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 'The URL of the audio attachment. `messenger` supports .mp3.'
+          minLength: 1
+          maxLength: 2000
+          example: 'https://example.com/audio.mp3'
+    VideoProperty:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 'The URL of the video attachment. `messenger` supports .mp4'
+          minLength: 1
+          maxLength: 2000
+          example: 'https://example.com/video.mp4'
+    FileProperty:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 'The URL of the file attachment. `messenger` supports a wide range of attachments including .zip, .csv and .pdf'
+          minLength: 1
+          maxLength: 2000
+          example: 'https://example.com/file.zip'
+    TemplateProperty:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The name of the template.'
+          example: 'whatsapp:hsm:technology:nexmo:verify'
+        parameters:
+          type: array
+          items:
+            type: object
+            properties:
+              default:
+                type: string
+                description: 'The parameters are an array. The first value being {{1}} in the template.'
+                example: '1234'
+        fallback_locale:
+          type: string
+          description: 'Templates sent to a user will be localized according to the device locale settings. Optionally specify a fallback locale for displaying the message if a translation does not exist'
+          default: 'en'
+          example: 'en'
+    LocationProperty:
+      type: object
+      properties:
+        lat:
+          type: string
+          description: The latitude of the location attachment.
+          example: '51.5228349'
+        long:
+          type: string
+          description: The longitude of the location attachment.
+          example: '-0.0854414'
+        url:
+          type: string
+          description: Depending on the provider, this can either be the location on a map or the website of the business at this location.
+        address:
+          type: string
+          description: The address of the location attachment.
+          example: '15 Bonhill St London EC2A 4DN'
+        name:
+          type: string
+          description: The name of the location attachment.
+          example: 'Nexmo London'
+  parameters:
+    api_version_header:
+      in: header
+      name: api-version
+      schema:
+        type: string
+        default: ""
+      required: false
+      description: API-version to use. Not provided uses latest
+      example:
+    application_uuid:
+      in: path
+      name: uuid
+      schema:
+        type: string
+        default: "{{uuid}}"
+      required: true
+      description: UUID of the application
+      example: aaaaaaaa-bbbb-cccc-dddd-0123456789ab
+    message_application_id_header:
+      in: header
+      name: ApplicationId
+      schema:
+        type: string
+        default: "{{ApplicationId}}"
+      required: true
+      description: UUID of the application
+      example: aaaaaaaa-bbbb-cccc-dddd-0123456789ab
+  responses:
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error401'
+    app_created:
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/application'
+    app_list:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                title: The total number of records returned by your request.
+                example: 100
+              page_size:
+                type: integer
+                title: The amount of records returned in this response.
+                example: 10
+              record_index:
+                type: integer
+                title: The `record_index` used in your request.
+                example: 0
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        title: Link to the object
+                        example: "/applications?page_size=10&record_index=20&order=asc"
+              _embedded:
+                description: >-
+                    A list of application objects. See the
+                    [get details of a specific application](#getApplication)
+                    response fields for a description of the nested objects
+                type: object
+                properties:
+                  applications:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/application'
+    app_detail_ok:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/application'
