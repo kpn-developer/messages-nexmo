@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "be2ae4f3-7269-4418-9838-51cc0332f85f",
-		"name": "Messages - Nexmo",
+		"name": "Messages-Nexmo",
 		"description": "Encapsulates multiple APIs to interact with our various channels such as WhatsApp Business, SMS, MMS, Viber, Facebook Messenger, etc. The API normalises information across all channels to abstracted to, from and content. This API is for outbound messages.\n\n---\n## [KPN Developer](https://developer.kpn.com/)<br/> [Getting Started](https://developer.kpn.com/getting-started)\n---\n\nContact Support:\n Name: API Support\n Email: api_developer@kpn.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_uid": "4406147-be2ae4f3-7269-4418-9838-51cc0332f85f"

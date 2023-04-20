@@ -9,7 +9,7 @@ id = f518e4c5-4682-4982-9be2-9f2f6e4c08af
 
 [config.relations.collections]
 rootDirectory = postman/collections
-files[] = {"id":"4406147-be2ae4f3-7269-4418-9838-51cc0332f85f","path":"Messages - Nexmo.json","metaData":{}}
+files[] = {"id":"4406147-be2ae4f3-7269-4418-9838-51cc0332f85f","path":"Messages-Nexmo.json","metaData":{}}
 
 [config.relations.collections.metaData]
 
